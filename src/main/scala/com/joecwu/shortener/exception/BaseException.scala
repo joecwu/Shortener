@@ -4,6 +4,7 @@ import com.joecwu.shortener._
 /**
  * Created by Joe_Wu on 8/5/15.
  */
+//TODO abstract TracerInfo to trait
 case class TracerInfo(tid:String=java.util.UUID.randomUUID.toString)
 
 class BaseException(msg : String = "", cause: Throwable = null)(implicit tracerInfo: TracerInfo) extends Exception(msg, cause) {
