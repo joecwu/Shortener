@@ -1,8 +1,10 @@
 name := "shortener"
 
-version := "0.1.0"
+version := "0.1.1"
 
 scalaVersion := "2.11.7"
+
+crossScalaVersions := Seq("2.10.5","2.11.7")
 
 resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 
@@ -12,6 +14,16 @@ libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.1.3"
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.0.13"
 
-libraryDependencies += "org.clapper" %% "grizzled-slf4j" % "1.0.2"
+libraryDependencies <++= scalaVersion(sv => Seq( grizzled(sv),scalatest(sv) ))
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4"
+def grizzled(ver:String) =
+  (ver match {
+    case "2.9.3" => "org.clapper" % "grizzled-slf4j_2.9.2" % "0.6.10"
+    case _ => "org.clapper" %% "grizzled-slf4j" % "1.0.2"
+  })
+
+def scalatest(ver:String) =
+  (ver match {
+    case "2.9.2" | "2.9.3" => "org.scalatest" %% "scalatest" % "1.9.2"
+    case _ => "org.scalatest" %% "scalatest" % "2.2.5"
+  })

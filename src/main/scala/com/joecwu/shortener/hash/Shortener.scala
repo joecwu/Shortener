@@ -18,10 +18,8 @@ trait Shortener extends com.joecwu.shortener.Shortener {
         val digest = MessageDigest.getInstance("sha")
         digest.update(url.getBytes())
         val shorter = new BigInteger(1,digest.digest()).toString(16)
-        dbClient.save(url,shorter).map{ _ =>
+        dbClient.save(url,shorter).flatMap{ _ =>
           Good(shorter)
-        }.getOrElse{
-          Bad(DBException(s"Store shorter in DB failed. url:[$url] shorter:[$shorter]"))
         }
       }
     }
