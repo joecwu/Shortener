@@ -5,13 +5,15 @@ import com.joecwu.shortener.exception._
 import org.scalactic._
 import java.security._
 import java.math._
+import scalaz._
+import Scalaz._
 
 /**
  * Created by Joe_Wu on 8/5/15.
  */
 trait Shortener extends com.joecwu.shortener.Shortener {
 
-  def shorter(url:String)(implicit dbClient : DBClient, tracerInfo: TracerInfo) = {
+  def shorter(url:String)(implicit tracerInfo: TracerInfo) = Reader((dbClient : DBClient) => {
     dbClient.getShorter(url).flatMap{ shorterInDB =>
       shorterInDB.map(Good(_)).getOrElse{
         // generate new one.
@@ -23,11 +25,11 @@ trait Shortener extends com.joecwu.shortener.Shortener {
         }
       }
     }
-  }
+  })
 
-  def taller(short:String)(implicit dbClient : DBClient, tracerInfo: TracerInfo) = {
+  def taller(short:String)(implicit tracerInfo: TracerInfo) = Reader((dbClient : DBClient) => {
     dbClient.getUrl(short)
-  }
+  })
 }
 
 object Shortener extends Shortener
