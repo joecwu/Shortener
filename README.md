@@ -3,10 +3,11 @@ URL Shortener library in Scala
 
 ## SBT users 
 
-    libraryDependencies += "com.joecwu" % "shortener_2.11" % "0.1.0"
+    libraryDependencies += "com.joecwu" %% "shortener" % "0.2.0"
 
 ## Dependency
 
+- [Scalaz](https://github.com/scalaz/scalaz)
 - [Scalactic](http://www.scalactic.org/)
 
 ## Usage
@@ -16,11 +17,12 @@ URL Shortener library in Scala
     import com.joecwu.shortener.db.memory.MemoryDBClient
     import com.joecwu.shortener.exception.TracerInfo
     
-    implicit val dbClient = MemoryDBClient
+    val dbClient = MemoryDBClient
     implicit val traceInfo = TracerInfo("CustomTracerId")
     val url = "http://www.google.com"
-    val short = shorter(url).getOrElse("")
-    val url2 = taller(short).getOrElse("")
+    // both shorter & taller are [Reader Monad](https://gist.github.com/joecwu/3e1461d7fb1df268c482)
+    val short = shorter(url)(dbClient).getOrElse("")
+    val url2 = taller(short)(dbClient).getOrElse("")
 
 ## Design Concept
 

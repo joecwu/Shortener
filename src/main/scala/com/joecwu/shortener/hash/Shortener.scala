@@ -33,3 +33,4 @@ trait Shortener extends com.joecwu.shortener.Shortener {
 }
 
 object Shortener extends Shortener
+
